@@ -19,10 +19,11 @@ class Forecast {
   }
 }
 
-const { lat, lon, searchQuery } = request.query;
 
-app.get('/', (req, res) => {
-  res.send('Server is running');
+app.get('/weather', (request, response) => {
+
+  const { lat, lon, searchQuery } = request.query;
+
 });
 
 app.get('/weather', (request, response) => {
