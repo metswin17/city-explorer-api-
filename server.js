@@ -1,8 +1,11 @@
 const express = require('express'); 
 const cors = require('cors'); 
 require('dotenv').config(); 
+
+
 const app = express();
 app.use(cors());
+
 const weatherData = require('./data/weather.json');
 
 const PORT = process.env.PORT || 3001;
@@ -25,7 +28,11 @@ app.get('/', (req, res) => {
 
 app.get('/weather', (request, response) => {
 
+
   const { searchQuery } = request.query;
+const { lat, lon, searchQuery } = request.query;
+city.city_name.toLowerCase() === searchQuery.toLowerCase()
+;
 
   response.send(`You searched for: ${searchQuery}`);
 
