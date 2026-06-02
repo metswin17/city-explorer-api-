@@ -25,9 +25,9 @@ app.get('/', (req, res) => {
 
 app.get('/weather', (request, response) => {
 
-  const { lat, lon, searchQuery } = request.query;
+  const { searchQuery } = request.query;
 
-  response.send('weather route working');
+  response.send(`You searched for: ${searchQuery}`);
 
 });
 
