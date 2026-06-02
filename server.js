@@ -5,7 +5,6 @@ const app = express();
 app.use(cors());
 const weatherData = require('./data/weather.json');
 
-console.log(weatherData);
 const PORT = process.env.PORT || 3001;
 
 class Forecast {
@@ -20,13 +19,15 @@ class Forecast {
 }
 
 
+app.get('/', (req, res) => {
+  res.send('Server is running');
+});
+
 app.get('/weather', (request, response) => {
 
   const { lat, lon, searchQuery } = request.query;
 
-});
-
-app.get('/weather', (request, response) => {
+  response.send('weather route working');
 
 });
 
