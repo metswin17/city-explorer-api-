@@ -1,12 +1,14 @@
-const express = require('express'); 
-const cors = require('cors'); 
-require('dotenv').config(); 
+import express from 'express';
+import cors from 'cors';
+import axios from 'axios';
+import dotenv from 'dotenv';
 
+dotenv.config();
 
 const app = express();
 app.use(cors());
 
-const weatherData = require('./data/weather.json');
+import weatherData from './data/weather.json' with { type: 'json' };
 
 const PORT = process.env.PORT || 3001;
 
@@ -22,20 +24,20 @@ class Forecast {
 }
 
 
-app.get('/', (req, res) => {
-  res.send('Server is running');
-});
-
 app.get('/weather', (request, response) => {
 
-
   const { searchQuery } = request.query;
-const { lat, lon, searchQuery } = request.query;
-city.city_name.toLowerCase() === searchQuery.toLowerCase()
-;
 
-  response.send(`You searched for: ${searchQuery}`);
-git
+  const targetCity = weatherData.find(
+    city =>
+      city.city_name.toLowerCase() === searchQuery.toLowerCase()
+  );
+
+  const formattedWeather = targetCity.data.map(
+    day => new Forecast(day)
+  );
+
+  response.send(formattedWeather);
 });
 
 app.listen(PORT, () => {
