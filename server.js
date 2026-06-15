@@ -11,6 +11,10 @@ app.use(cors());
 
 const PORT = process.env.PORT || 3001;
 
+app.get('/', (request, response) => {
+  response.status(200).send('City Explorer API is running');
+});
+
 class Forecast {
   constructor(dayObj) {
     this.date = dayObj.valid_date;
