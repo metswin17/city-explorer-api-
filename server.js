@@ -1,7 +1,9 @@
 import express from 'express';
 import cors from 'cors';
-import axios from 'axios';
 import dotenv from 'dotenv';
+import handleWeather from './weather.js';
+import handleMovies from './movies.js';
+
 
 dotenv.config();
 
@@ -14,6 +16,10 @@ const PORT = process.env.PORT || 3001;
 app.get('/', (request, response) => {
   response.status(200).send('City Explorer API is running');
 });
+
+app.get('/weather', handleWeather);
+
+app.get('/movies', handleMovies);
 
 class Forecast {
   constructor(dayObj) {
