@@ -1,5 +1,8 @@
 import axios from 'axios';
 
+const weatherCache = {};
+const cacheTime = 50000;
+
 class Forecast {
   constructor(dayObj) {
     this.date = dayObj.valid_date;
@@ -15,6 +18,20 @@ async function handleWeather(request, response) {
   try {
     const { lat, lon } = request.query;
 
+    const key = `${lat}-${lon}`;
+
+if (
+  weatherCache[key] &&
+  Date.now() - weatherCache[key].dateAdded < cacheTime
+) {
+  console.log('Weather cache hit');
+
+  response.status(200).send(weatherCache[key].data);
+  return;
+}
+
+console.log('Weather cache miss');
+
     const weatherUrl =
       `https://api.weatherbit.io/v2.0/forecast/daily` +
       `?lat=${lat}` +
@@ -28,6 +45,11 @@ async function handleWeather(request, response) {
       weatherResponse.data.data.map(
         day => new Forecast(day)
       );
+
+    weatherCache[key] = {
+      data: forecastData,
+      dateAdded: Date.now()
+    };
 
     response.status(200).send(forecastData);
 

@@ -1,5 +1,8 @@
 import axios from 'axios';
 
+const movieCache = {};
+const cacheTime = 50000;
+
 class Movie {
   constructor(movie) {
     this.title = movie.title;
@@ -16,8 +19,21 @@ class Movie {
 async function handleMovies(request, response) {
   try {
     const city = request.query.searchQuery;
+    
+    if (
+      movieCache[city] &&
+      Date.now() - movieCache[city].dateAdded < cacheTime
+    ) {
+      console.log('Movie cache hit');
+    
+      response.status(200).send(movieCache[city].data);
+      return;
+    }
+    
+    console.log('Movie cache miss');
 
     const movieUrl =
+
       `https://api.themoviedb.org/3/search/movie` +
       `?api_key=${process.env.MOVIE_API_KEY}` +
       `&query=${city}`;
@@ -29,6 +45,11 @@ async function handleMovies(request, response) {
       movieResponse.data.results.map(movie => {
         return new Movie(movie);
       });
+
+    movieCache[city] = {
+      data: movies,
+      dateAdded: Date.now()
+    };
 
     response.status(200).send(movies);
 
